@@ -46,11 +46,11 @@ export default async function TeamPage({ params }: Props) {
   if (!agencyDetails) return
 
   return <DataTable actionButtonText={
-      <>
-        <Plus size={15} />
-        Add
-      </>
-    }
+    <>
+      <Plus size={15} />
+      Add
+    </>
+  }
     modalChildren={<SendInvitation agencyId={agencyDetails.id} />}
     filterValue="name"
     columns={columns}

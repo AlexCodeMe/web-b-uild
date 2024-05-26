@@ -5,8 +5,8 @@ import { db } from "./db"
 import { redirect } from "next/navigation"
 import { Agency, Plan, Prisma, Role, SubAccount, User } from "@prisma/client"
 import { v4 } from "uuid"
-import { string } from "zod"
-import { CreateMediaType } from "./types"
+import { string, z } from "zod"
+import { CreateFunnelFormSchema, CreateMediaType } from "./types"
 
 export async function getAuthUserDetails() {
     const user = await currentUser()
@@ -37,9 +37,7 @@ export async function getAuthUserDetails() {
 export async function createTeamUser(agencyId: string, user: User) {
     if (user.role === 'AGENCY_OWNER') return null
 
-    const response = await db.user.create({
-        data: { ...user }
-    })
+    const response = await db.user.create({ data: { ...user } })
 
     return response
 }
@@ -535,5 +533,90 @@ export async function deleteMedia(mediaId: string) {
             id: mediaId,
         },
     })
+    return response
+}
+
+export async function getPipelineDetails(pipelineId: string) {
+    const response = await db.pipeline.findUnique({
+        where: {
+            id: pipelineId,
+        },
+    })
+
+    return response
+}
+
+export async function getLanesWithTicketAndTags(pipelineId: string) {
+    const response = await db.lane.findMany({
+        where: {
+            pipelineId,
+        },
+        orderBy: { order: 'asc' },
+        include: {
+            Tickets: {
+                orderBy: {
+                    order: 'asc',
+                },
+                include: {
+                    Tags: true,
+                    Assigned: true,
+                    Customer: true,
+                },
+            },
+        },
+    })
+
+    return response
+}
+
+export async function upsertPipeline(pipeline: Prisma.PipelineUncheckedCreateWithoutLaneInput) {
+    const response = await db.pipeline.upsert({
+        where: { id: pipeline.id || v4() },
+        update: pipeline,
+        create: pipeline,
+    })
+
+    return response
+}
+
+export async function upsertFunnel(
+    subaccountId: string,
+    funnel: z.infer<typeof CreateFunnelFormSchema> & { liveProducts: string },
+    funnelId: string
+) {
+    const response = await db.funnel.upsert({
+        where: { id: funnelId },
+        update: funnel,
+        create: {
+            ...funnel,
+            id: funnelId || v4(),
+            subAccountId: subaccountId,
+        },
+    })
+
+    return response
+}
+
+export async function upsertLane(lane: Prisma.LaneUncheckedCreateInput) {
+    let order: number
+
+    if (!lane.order) {
+        const lanes = await db.lane.findMany({
+            where: {
+                pipelineId: lane.pipelineId,
+            },
+        })
+
+        order = lanes.length
+    } else {
+        order = lane.order
+    }
+
+    const response = await db.lane.upsert({
+        where: { id: lane.id || v4() },
+        update: lane,
+        create: { ...lane, order },
+    })
+
     return response
 }

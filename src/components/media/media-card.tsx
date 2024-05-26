@@ -40,8 +40,7 @@ export default function MediaCard({ file }: { file: Media }) {
             <DropdownMenuContent>
               <DropdownMenuLabel>Menu</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="flex gap-2"
+              <DropdownMenuItem className="flex gap-2"
                 onClick={() => {
                   navigator.clipboard.writeText(file.link)
                   toast({ title: 'Copied To Clipboard' })

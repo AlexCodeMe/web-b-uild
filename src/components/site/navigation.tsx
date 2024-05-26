@@ -28,7 +28,7 @@ export default function Navigation({ user }: { user?: null | User}) {
                 className='bg-primary text-white p-2 px-4 rounded-md hover:bg-primary/80'>
                 Login
             </Link>
-            <UserButton />
+            <UserButton afterSignOutUrl='/' />
             <ModeToggle />
         </aside>
     </div>
