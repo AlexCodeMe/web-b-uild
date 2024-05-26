@@ -10,7 +10,7 @@ import { useModal } from '@/providers/modal-provider'
 import { Pipeline } from '@prisma/client'
 import { Check, ChevronsUpDown, Plus } from 'lucide-react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
     subAccountId: string
@@ -27,6 +27,8 @@ export default function PipelineInfoBar({
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(pipelineId)
 
+    console.log('Rendering PipelineInfoBar with pipelines:', pipelines)
+
     const handleClickCreatePipeline = () => {
         setOpenModal(
             <CustomModal
@@ -37,8 +39,6 @@ export default function PipelineInfoBar({
             </CustomModal>
         )
     }
-
-    console.log('PIPELINES', pipelines)
 
     return (
         <div>

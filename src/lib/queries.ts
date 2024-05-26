@@ -3,10 +3,10 @@
 import { clerkClient, currentUser } from "@clerk/nextjs/server"
 import { db } from "./db"
 import { redirect } from "next/navigation"
-import { Agency, Plan, Prisma, Role, SubAccount, User } from "@prisma/client"
+import { Agency, Lane, Plan, Prisma, Role, SubAccount, Ticket, User } from "@prisma/client"
 import { v4 } from "uuid"
-import { string, z } from "zod"
 import { CreateFunnelFormSchema, CreateMediaType } from "./types"
+import { z } from "zod"
 
 export async function getAuthUserDetails() {
     const user = await currentUser()
@@ -616,6 +616,80 @@ export async function upsertLane(lane: Prisma.LaneUncheckedCreateInput) {
         where: { id: lane.id || v4() },
         update: lane,
         create: { ...lane, order },
+    })
+
+    return response
+}
+
+export async function getTicketsWithTags(pipelineId: string) {
+    const response = await db.ticket.findMany({
+        where: {
+            Lane: {
+                pipelineId,
+            },
+        },
+        include: { Tags: true, Assigned: true, Customer: true },
+    })
+    return response
+}
+
+export async function updateLanesOrder(lanes: Lane[]) {
+    try {
+        const updateTrans = lanes.map((lane) =>
+            db.lane.update({
+                where: {
+                    id: lane.id,
+                },
+                data: {
+                    order: lane.order,
+                },
+            })
+        )
+
+        await db.$transaction(updateTrans)
+        console.log('🟢 Done reordered 🟢')
+    } catch (error) {
+        console.log(error, 'ERROR UPDATE LANES ORDER')
+    }
+}
+
+export async function updateTicketsOrder(tickets: Ticket[]) {
+    try {
+        const updateTrans = tickets.map((ticket) =>
+            db.ticket.update({
+                where: {
+                    id: ticket.id,
+                },
+                data: {
+                    order: ticket.order,
+                    laneId: ticket.laneId,
+                },
+            })
+        )
+
+        await db.$transaction(updateTrans)
+        console.log('🟢 Done reordered 🟢')
+    } catch (error) {
+        console.log(error, '🔴 ERROR UPDATE TICKET ORDER')
+    }
+}
+
+export async function deleteLane(laneId: string) {
+    const resposne = await db.lane.delete({
+        where:
+        {
+            id: laneId
+        }
+    })
+
+    return resposne
+}
+
+export async function deletePipeline(pipelineId: string) {
+    const response = await db.pipeline.delete({
+        where: {
+            id: pipelineId,
+        }
     })
 
     return response

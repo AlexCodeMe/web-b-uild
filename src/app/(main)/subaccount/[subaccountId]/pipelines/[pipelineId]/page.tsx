@@ -1,10 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { db } from '@/lib/db'
-import { getLanesWithTicketAndTags, getPipelineDetails } from '@/lib/queries'
+import { getLanesWithTicketAndTags, getPipelineDetails, updateLanesOrder, updateTicketsOrder } from '@/lib/queries'
 import { LaneDetail } from '@/lib/types'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import PipelineInfoBar from '../_components/pipeline-infobar'
+import PipelineView from '../_components/pipeline-view'
+import PipelineSettings from '../_components/pipeline-settings'
 
 export default async function PipelineIdPage({ params }: {
   params: {
@@ -19,11 +21,15 @@ export default async function PipelineIdPage({ params }: {
     where: {
       subAccountId: params.subaccountId
     },
-  })
+  }) ?? []
+
+  console.log('Pipelines fetched:', pipelines)
 
   const lanes = (await getLanesWithTicketAndTags(
     params.pipelineId
   )) as LaneDetail[]
+
+  console.log('Lanes fetched:', lanes)
 
   return (
     <Tabs defaultValue="view"
@@ -41,21 +47,21 @@ export default async function PipelineIdPage({ params }: {
         </div>
       </TabsList>
       <TabsContent value="view">
-        {/* <PipelineView
+        <PipelineView
           lanes={lanes}
           pipelineDetails={pipelineDetails}
           pipelineId={params.pipelineId}
           subaccountId={params.subaccountId}
           updateLanesOrder={updateLanesOrder}
           updateTicketsOrder={updateTicketsOrder}
-        /> */}
+        />
       </TabsContent>
       <TabsContent value="settings">
-        {/* <PipelineSettings
+        <PipelineSettings
           pipelineId={params.pipelineId}
           pipelines={pipelines}
           subaccountId={params.subaccountId}
-        /> */}
+        />
       </TabsContent>
     </Tabs>
   )
