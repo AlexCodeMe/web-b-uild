@@ -135,7 +135,7 @@ export default function PipelineView({
                 <div className='flex items-center justify-between'>
                     <h1 className='text-2xl'>{pipelineDetails?.name}</h1>
                     <Button onClick={handleAddLane}
-                        className='flex items-center gap-4'
+                        className='flex items-center gap-2'
                     >
                         <Plus size={15} />
                         Create Lane
@@ -146,14 +146,13 @@ export default function PipelineView({
                     direction='horizontal'
                 >
                     {(provided) => (
-                        <div
+                        <div ref={provided.innerRef}
                             className="flex item-center gap-x-2 overflow-scroll"
                             {...provided.droppableProps}
-                            ref={provided.innerRef}
                         >
                             <div className="flex mt-4">
                                 {allLanes.map((lane, index) => (
-                                    <PipelineLane
+                                    <PipelineLane key={lane.id}
                                         allTickets={allTickets}
                                         setAllTickets={setAllTickets}
                                         subaccountId={subaccountId}
@@ -161,7 +160,6 @@ export default function PipelineView({
                                         tickets={lane.Tickets}
                                         laneDetails={lane}
                                         index={index}
-                                        key={lane.id}
                                     />
                                 ))}
                                 {provided.placeholder}

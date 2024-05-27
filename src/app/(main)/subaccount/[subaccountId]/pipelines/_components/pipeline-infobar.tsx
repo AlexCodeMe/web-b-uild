@@ -3,7 +3,7 @@
 import CustomModal from '@/components/custom-modal'
 import CreatePipelineForm from '@/components/forms/create-pipeline-form'
 import { Button } from '@/components/ui/button'
-import { Command, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command'
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { useModal } from '@/providers/modal-provider'
@@ -27,7 +27,7 @@ export default function PipelineInfoBar({
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(pipelineId)
 
-    console.log('Rendering PipelineInfoBar with pipelines:', pipelines)
+    console.log('PipelineInfoBar pipelines:', pipelines)
 
     const handleClickCreatePipeline = () => {
         setOpenModal(
@@ -62,26 +62,28 @@ export default function PipelineInfoBar({
                         <Command>
                             <CommandEmpty>No pipelines found.</CommandEmpty>
                             <CommandGroup>
-                                {pipelines.map((pipeline) => (
-                                    <Link key={pipeline.id}
-                                        href={`/subaccount/${subAccountId}/pipelines/${pipeline.id}`}
-                                    >
-                                        <CommandItem key={pipeline.id}
-                                            value={pipeline.id}
-                                            onSelect={(currentValue) => {
-                                                setValue(currentValue)
-                                                setOpen(false)
-                                            }}
+                                <CommandList>
+                                    {pipelines.map((pipeline) => (
+                                        <Link key={pipeline.id}
+                                            href={`/subaccount/${subAccountId}/pipelines/${pipeline.id}`}
                                         >
-                                            <Check className={cn(
-                                                'mr-2 h-4 w-4',
-                                                value === pipeline.id ? 'opacity-100' : 'opacity-0'
-                                            )}
-                                            />
-                                            {pipeline.name}
-                                        </CommandItem>
-                                    </Link>
-                                ))}
+                                            <CommandItem key={pipeline.id}
+                                                value={pipeline.id}
+                                                onSelect={(currentValue) => {
+                                                    setValue(currentValue)
+                                                    setOpen(false)
+                                                }}
+                                            >
+                                                <Check className={cn(
+                                                    'mr-2 h-4 w-4',
+                                                    value === pipeline.id ? 'opacity-100' : 'opacity-0'
+                                                )}
+                                                />
+                                                {pipeline.name}
+                                            </CommandItem>
+                                        </Link>
+                                    ))}
+                                </CommandList>
                                 <Button variant="secondary"
                                     className="flex gap-2 w-full mt-4"
                                     onClick={handleClickCreatePipeline}
