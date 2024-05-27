@@ -59,8 +59,8 @@ export default function PipelineLane({
     function handleCreateTicket() {
         setOpen(
             <CustomModal
-                title="Create A Ticket"
-                subheading="Tickets are a great way to keep track of tasks"
+                title='Create A Ticket'
+                subheading='Tickets are a great way to keep track of tasks'
             >
                 <TicketForm
                     getNewTicket={addNewTicket}
@@ -74,8 +74,8 @@ export default function PipelineLane({
     function handleEditLane() {
         setOpen(
             <CustomModal
-                title="Edit Lane Details"
-                subheading=""
+                title='Edit Lane Details'
+                subheading=''
             >
                 <CreateLaneForm
                     pipelineId={pipelineId}
@@ -124,32 +124,32 @@ export default function PipelineLane({
               <div
                 {...provided.draggableProps}
                 ref={provided.innerRef}
-                className="h-full"
+                className='h-full'
               >
                 <AlertDialog>
                   <DropdownMenu>
-                    <div className="bg-slate-200/30 dark:bg-background/20  h-[700px] w-[300px] px-4 relative rounded-lg overflow-visible flex-shrink-0 ">
+                    <div className='bg-slate-200/30 dark:bg-background/20  h-[700px] w-[300px] px-4 relative rounded-lg overflow-visible flex-shrink-0 '>
                       <div
                         {...provided.dragHandleProps}
-                        className=" h-14 backdrop-blur-lg dark:bg-background/40 bg-slate-200/60  absolute top-0 left-0 right-0 z-10 "
+                        className=' h-14 backdrop-blur-lg dark:bg-background/40 bg-slate-200/60  absolute top-0 left-0 right-0 z-10 '
                       >
-                        <div className="h-full flex items-center p-4 justify-between cursor-grab border-b-[1px] ">
+                        <div className='h-full flex items-center p-4 justify-between cursor-grab border-b-[1px] '>
                           {/* {laneDetails.order} */}
-                          <div className="flex items-center w-full gap-2">
+                          <div className='flex items-center w-full gap-2'>
                             <div
                               className={cn('w-4 h-4 rounded-full')}
                               style={{ background: randomColor }}
                             />
-                            <span className="font-bold text-sm">
+                            <span className='font-bold text-sm'>
                               {laneDetails.name}
                             </span>
                           </div>
-                          <div className="flex items-center flex-row">
-                            <Badge className="bg-white text-black">
+                          <div className='flex items-center flex-row'>
+                            <Badge className='bg-white text-black'>
                               {amt.format(laneAmt)}
                             </Badge>
                             <DropdownMenuTrigger>
-                              <MoreVertical className="text-muted-foreground cursor-pointer" />
+                              <MoreVertical className='text-muted-foreground cursor-pointer' />
                             </DropdownMenuTrigger>
                           </div>
                         </div>
@@ -158,14 +158,14 @@ export default function PipelineLane({
                       <Droppable
                         droppableId={laneDetails.id.toString()}
                         key={laneDetails.id}
-                        type="ticket"
+                        type='ticket'
                       >
                         {(provided) => (
-                          <div className=" max-h-[700px] overflow-scroll pt-12 ">
+                          <div className=' max-h-[700px] overflow-scroll pt-12 '>
                             <div
                               {...provided.droppableProps}
                               ref={provided.innerRef}
-                              className="mt-2"
+                              className='mt-2'
                             >
                               {tickets.map((ticket, index) => (
                                 <PipelineTicket
@@ -187,21 +187,21 @@ export default function PipelineLane({
                         <DropdownMenuLabel>Options</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <AlertDialogTrigger>
-                          <DropdownMenuItem className="flex items-center gap-2">
+                          <DropdownMenuItem className='flex items-center gap-2'>
                             <Trash size={15} />
                             Delete
                           </DropdownMenuItem>
                         </AlertDialogTrigger>
     
                         <DropdownMenuItem
-                          className="flex items-center gap-2"
+                          className='flex items-center gap-2'
                           onClick={handleEditLane}
                         >
                           <Edit size={15} />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="flex items-center gap-2"
+                          className='flex items-center gap-2'
                           onClick={handleCreateTicket}
                         >
                           <PlusCircleIcon size={15} />
@@ -219,9 +219,9 @@ export default function PipelineLane({
                           your account and remove your data from our servers.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
-                      <AlertDialogFooter className="flex items-center">
+                      <AlertDialogFooter className='flex items-center'>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction className="bg-destructive"
+                        <AlertDialogAction className='bg-destructive'
                           onClick={handleDeleteLane}
                         >
                           Continue

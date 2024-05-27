@@ -99,9 +99,13 @@ export default function PipelineView({
                         .map((item, idx) => {
                             return { ...item, order: idx }
                         })
+
                     originLane.Tickets = newOrderedTickets
+
                     setAllLanes(newLanes)
+
                     updateTicketsOrder(newOrderedTickets)
+
                     router.refresh()
                 } else {
                     const [currentTicket] = originLane.Tickets.splice(source.index, 1)
@@ -118,11 +122,14 @@ export default function PipelineView({
                     destinationLane.Tickets.forEach((ticket, idx) => {
                         ticket.order = idx
                     })
+
                     setAllLanes(newLanes)
+
                     updateTicketsOrder([
                         ...destinationLane.Tickets,
                         ...originLane.Tickets,
                     ])
+                    
                     router.refresh()
                 }
             }
